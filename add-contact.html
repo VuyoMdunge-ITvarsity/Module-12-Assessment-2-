@@ -1,0 +1,65 @@
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Contact Form</title>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+        <br/>
+        <form id="editForm">
+            <label for="firstname">First name</label>
+            <input type="text" name="firstname" id="firstname" required><br/>
+            <label for="lastname">Last name</label>
+            <input type="text" name="lastname" id="lastname" required><br/>
+            <label for="mobile">Mobile</label>
+            <input type="text" name="mobile" id="mobile" required><br/>
+            <label for="email">Email</label>
+            <input type="text" name="email" id="email" required><br/>
+            <label for="avatar">Select a file</label><br/>
+            <input type="file" name="avatar" id="avatar"><br/>
+            <button type="submit" id="submitForm">Submit</button>
+        </form>
+        <br/>
+        <button id="homeLink" type="button">Home</button>
+        
+        <script src="config.js"></script>
+        <script>
+        
+        document.getElementById("editForm").addEventListener('submit', submitForm);
+        document.getElementById("homeLink").addEventListener('click', homeLink);
+        
+        function submitForm(e) {
+            e.preventDefault();  
+
+            const form = new FormData(document.querySelector('#editForm'));
+            form.append('apiKey', apiKey);  
+
+            fetch(rootPath + 'controller/insert-contact/', {
+                method: 'POST',
+               
+                body: form
+            })
+            .then(function(response){
+                return response.text();
+            })
+            .then(function(data){
+                if (data == "1") {
+                    alert("Contact added.");
+                    homeLink(); 
+                } else {
+                    alert("Error: " + data);
+                }
+            })
+            .catch(function(error) {
+                console.error('Error adding contact:', error);
+                alert('An error occurred while adding the contact.');
+            });
+        }
+        
+        function homeLink() {
+            window.open("index.html", "_self");
+        }
+            
+        </script>
+    </body>
+</html>
